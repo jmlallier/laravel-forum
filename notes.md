@@ -1,0 +1,10 @@
+# Forum
+
+### Models:
+
+1. Thread
+2. Reply
+3. User
+
+A. A thread is created by a user
+B. A reply belongs to a thread and a reply belongs to a user 
