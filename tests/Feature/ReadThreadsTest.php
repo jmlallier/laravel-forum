@@ -17,29 +17,33 @@ class ReadThreadsTest extends DatabaseTestCase {
 	}
 
 	/** @test */
-	public function a_user_can_view_all_threads() {
-
+	function a_user_can_view_all_threads() {
 		$this->get( '/threads' )
 		     ->assertSee( $this->thread->title )
 		     ->assertSee( $this->thread->body );
 	}
 
 	/** @test */
-	public function a_user_can_view_a_single_thread() {
-
+	function a_user_can_view_a_single_thread() {
 		$this->get( $this->thread->path() )
 		     ->assertSee( $this->thread->title )
 		     ->assertSee( $this->thread->body );
 	}
 
 	/** @test */
-	public function a_user_can_read_replies_that_are_associated_with_a_thread() {
-		// And that thread includes replies
+	function a_user_can_read_replies_that_are_associated_with_a_thread() {
 		$this->get( $this->thread->path() )
 		     ->assertSee( $this->reply->body );
+	}
 
-		// When we visit a thread page
-		// We should see the replies.
+	/** @test */
+	function a_user_can_filter_threads_according_to_a_tag() {
 
+		$channel            = create( 'App\Channel' );
+		$threadInChannel    = create( 'App\Thread', [ 'channel_id' => $channel->id ] );
+		$threadNotInChannel = create( 'App\Thread' );
+		$this->get( '/threads/' . $channel->slug )
+		     ->assertSee( $threadInChannel->title )
+		     ->assertDontSee( $threadNotInChannel->title );
 	}
 }
